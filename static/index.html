@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html ng-app="fileApp">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Load Dropzone CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.3.0/min/basic.min.css" integrity="sha256-RvDmZ4ZtPtrWmZdibCa80jCE32m21xuR5SuW6zfJaW4=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.3.0/dropzone.css" integrity="sha256-0Z6mOrdLEtgqvj7tidYQnCYWG3G2GAIpatAWKhDx+VM=" crossorigin="anonymous" />
+    <link
+    href="https://cdn.pydata.org/bokeh/release/bokeh-0.12.3.min.css"
+    rel="stylesheet" type="text/css" />
+    <link
+    href="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.3.min.css"
+    rel="stylesheet" type="text/css" />
+
+    <script src="https://cdn.pydata.org/bokeh/release/bokeh-0.12.3.min.js"></script>
+    <script src="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.3.min.js"></script>
+</head>
+
+<body ng-controller="fileCtrl" ng-cloak>
+
+    <div class="col-xs-6 col-xs-offset-3">
+        <div class="well">
+            <form action="" class="dropzone" dropzone="" id="dropzone">
+                <div class="dz-default dz-message">
+                </div>
+            </form>
+        </div>
+        <div class="pull-right">
+            <button class="btn btn-success" ng-click="uploadFile()">Upload File</button>
+        </div>
+    </div>
+    
+    <div id='result'>
+        
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.17/angular.min.js"></script>
+    <script src="static/app.js"></script>
+    <script src="static/fileAppControllers.js"></script>
+    <script src="static/fileAppDirectives.js"></script>
+
+    <!-- Load Dropzone JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/4.3.0/dropzone.js" integrity="sha256-vnXjg9TpLhXuqU0OcVO7x+DpR/H1pCeVLLSeQ/I/SUs=" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        Dropzone.autoDiscover = false;
+    </script>
+
+</body>
+</html>
