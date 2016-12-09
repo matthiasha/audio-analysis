@@ -12,7 +12,8 @@ class Data2D(object):
         
     def plot(self):
         fig = bokeh.plotting.figure(x_axis_label=self.xlabel,
-                                    y_axis_label=self.ylabel)
+                                    y_axis_label=self.ylabel, 
+                                    sizing_mode='stretch_both')
         fig.line(self.x, self.y)
         return fig
 
