@@ -25,4 +25,6 @@ def spectrum(pcm, nfft=None):
             nfft *= 2
     f, l = scipy.signal.csd(pcm, pcm, pcm.sample_rate, 
                             nperseg=nfft, scaling='spectrum')
-    return Data2D(f, 'frecuency [Hz]', l, 'level [dBFS]')
+    return Data2D(f, 'frequency [Hz]', 
+                  l, 'level [dBFS]')
+                  
