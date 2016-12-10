@@ -17,6 +17,8 @@ class Data2D(object):
         fig = bokeh.plotting.figure(x_axis_label=self.xlabel,
                                     y_axis_label=self.ylabel, 
                                     sizing_mode='stretch_both')
+        # increase the limit for sci. notation on x-axis
+        fig.xaxis.formatter = bokeh.models.BasicTickFormatter(power_limit_high=6)
         if self._x2_factor is not None:
             x2_ax = bokeh.models.LinearAxis(axis_label=self._x2_label)
             js_code = "return Math.round(tick * %f * 100) / 100" % self._x2_factor
