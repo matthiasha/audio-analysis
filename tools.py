@@ -19,8 +19,9 @@ class Data2D(object):
                                     sizing_mode='stretch_both')
         if self._x2_factor is not None:
             x2_ax = bokeh.models.LinearAxis(axis_label=self._x2_label)
-            js_code = "Math.round(tick * %f * 100) / 100" % self._x2_factor
+            js_code = "return Math.round(tick * %f * 100) / 100" % self._x2_factor
             x2_ax.formatter = bokeh.models.FuncTickFormatter(code=js_code)
+            fig.add_layout(x2_ax, 'above')
         fig.line(self.x, self.y)
         return fig
         
@@ -50,7 +51,7 @@ def spectrum(pcm, nfft=None):
                   l, 'level [dBFS sine]')
         
                   
-def power(pcm, window=255):
+def power(pcm, window=1023):
     assert len(pcm.shape) == 1, 'only applicable to 1D data'
     if len(pcm) % window:
         # truncate samples to be multiple of window
@@ -61,6 +62,6 @@ def power(pcm, window=255):
     p = _dbfs(np.mean(reshaped ** 2, 1)) 
     d2d = Data2D(i, 'samples', 
                  p, 'level [dBFS sine]')
-    d2d.add_x_axis('time [s]', 1 / pcm.sample_rate)
+    d2d.add_x_axis(1 / pcm.sample_rate, 'time [s]')
     return d2d
     
