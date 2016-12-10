@@ -35,6 +35,8 @@ function dropzone() {
         });
 
         scope.processDropzone = function() {
+            var tool = document.querySelector('input[name="tool"]:checked').value;
+            dropzone.options.url = '/upload/' + tool;
             dropzone.processQueue();
         };
 
