@@ -16,12 +16,12 @@ def send_static(path):
 @app.route('/')
 def root():
     return app.send_static_file('index.html')
-    
-@app.route('/upload/<tool>', methods = ['GET', 'POST'])
-def upload_file(tool):
+
+@app.route('/upload/<int:channel>/<tool>', methods = ['GET', 'POST'])
+def upload_file(channel, tool):
     if flask.request.method == 'POST':
         f = flask.request.files['uploadfile']
-        pcm = audio.PCMArray(f)[0]
+        pcm = audio.PCMArray(f)[channel]
         assert tool in ('spectrum', 'power')
         plot = getattr(tools, tool)(pcm).plot()
         return bokeh.embed.file_html(plot, bokeh.resources.CDN)

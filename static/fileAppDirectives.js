@@ -38,7 +38,8 @@ function dropzone() {
 
         scope.processDropzone = function() {
             var tool = document.querySelector('input[name="tool"]:checked').value;
-            dropzone.options.url = '/upload/' + tool;
+            var channel = document.querySelector('input[name="channel"]').value;
+            dropzone.options.url = '/upload/' + channel + '/' + tool;
             dropzone.processQueue();
         };
 
