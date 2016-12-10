@@ -2,15 +2,26 @@ import numpy as np
 import scipy.io.wavfile
 
 
+def _floatify(x):
+    formula = {'int8': lambda x: (x / 2**7) - 1,
+               'int16': lambda x: x / 2**15,
+               'int32': lambda x: x / 2**31,
+               }
+    if 'float' in str(x.dtype):
+        return x
+    else:
+        return formula[str(x.dtype)](x.astype('float32'))
+               
+
+
 class PCMArray(np.ndarray):
     def __new__(cls, f):
         sample_rate, a = scipy.io.wavfile.read(f)
-        # import pdb;pdb.set_trace()
-        obj = np.transpose(a).view(cls)
-        # set the new 'info' attribute to the value passed
-        obj.sample_rate = sample_rate
-        # Finally, we must return the newly created object:
-        return obj
+        pcm = _floatify(np.transpose(a)).view(cls)
+        if len(pcm.shape) == 1:
+            pcm = pcm.reshape((1, -1))
+        pcm.sample_rate = sample_rate
+        return pcm
 
     def __array_finalize__(self, obj):
         if obj is None: 
