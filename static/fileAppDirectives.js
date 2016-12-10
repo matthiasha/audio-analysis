@@ -24,7 +24,9 @@ function dropzone() {
 
             'success': function (file, response) {
                 // angular.element(document.querySelector('#result')).html(response);
+                document.open();
                 document.write(response);
+                document.close();
             }
         };
 

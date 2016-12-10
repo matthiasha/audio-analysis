@@ -24,9 +24,7 @@ def upload_file(tool):
         pcm = audio.PCMArray(f)[0]
         assert tool in ('spectrum', 'power')
         plot = getattr(tools, tool)(pcm).plot()
-        script, div = bokeh.embed.components(plot)        
-        return div + script
-        # return bokeh.embed.file_html(plot, bokeh.resources.CDN)
+        return bokeh.embed.file_html(plot, bokeh.resources.CDN)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0',
