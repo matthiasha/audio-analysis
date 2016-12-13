@@ -1,4 +1,5 @@
 import flask
+import flask_compress
 import bokeh.resources
 import bokeh.embed
 import hashlib
@@ -9,6 +10,7 @@ import tools
 
 
 app = flask.Flask(__name__)
+flask_compress.Compress(app)
 
 
 @app.route('/static/<path:path>')
