@@ -3,16 +3,15 @@ import scipy.io.wavfile
 
 
 def _floatify(x):
-    formula = {'int8': lambda x: (x / 2**7) - 1,
-               'int16': lambda x: x / 2**15,
-               'int32': lambda x: x / 2**31,
+    formula = {'uint8': lambda a: (a / 2 ** 7) - 1,
+               'int16': lambda a: a / 2 ** 15,
+               'int32': lambda a: a / 2 ** 31,
                }
     if 'float' in str(x.dtype):
         return x
     else:
         return formula[str(x.dtype)](x.astype('float32'))
                
-
 
 class PCMArray(np.ndarray):
     def __new__(cls, f):
