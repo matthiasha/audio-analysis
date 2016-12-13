@@ -8,7 +8,7 @@ function dropzone() {
             paramName: "uploadfile",
             maxThumbnailFilesize: 10,
             parallelUploads: 1,
-            autoProcessQueue: false
+            autoProcessQueue: true
         };
 
         var eventHandlers = {
@@ -23,10 +23,7 @@ function dropzone() {
             },
 
             'success': function (file, response) {
-                // angular.element(document.querySelector('#result')).html(response);
-                document.open();
-                document.write(response);
-                document.close();
+                window.location.replace(response);
             }
         };
 
@@ -37,9 +34,6 @@ function dropzone() {
         });
 
         scope.processDropzone = function() {
-            var tool = document.querySelector('input[name="tool"]:checked').value;
-            var channel = document.querySelector('input[name="channel"]').value;
-            dropzone.options.url = '/upload/' + channel + '/' + tool;
             dropzone.processQueue();
         };
 

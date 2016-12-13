@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <table>
+        {% for ch in channels %}
+        <tr>
+            <td>Channel {{ ch }}</td>
+            <td><a href="/wav/{{ uuid }}/{{ ch }}/spectrum">Spectrum</a></td>
+            <td><a href="/wav/{{ uuid }}/{{ ch }}/power">Power</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
