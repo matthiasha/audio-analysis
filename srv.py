@@ -1,11 +1,12 @@
+import sys
+import argparse
+import hashlib
+import functools
 import flask
 import flask_compress
 import bokeh.resources
 import bokeh.embed
 import bokeh.palettes
-import hashlib
-import functools
-
 import audio
 import tools
 
@@ -68,6 +69,17 @@ def tool(uids_str, channel, tool):
     return bokeh.embed.file_html(fig, bokeh.resources.CDN)
 
 
+def main(argv):
+    parser = argparse.ArgumentParser(description='Run the web server.',
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('--ip', default='0.0.0.0',
+                        help='set an IP adress to listen on')
+    parser.add_argument('--port', type=int, default='8080', 
+                        help='set a port to listen on')
+    args = parser.parse_args(argv)
+    app.run(host=args.ip, port=args.port)
+
+
 if __name__ == "__main__":
-    app.run(host='0.0.0.0',
-            port=8080)
+    main(sys.argv[1:])
+
