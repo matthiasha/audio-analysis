@@ -13,18 +13,20 @@ class Data2D(object):
         self._x2_factor = None
         self._x2_label = None
         
-    def plot(self):
-        fig = bokeh.plotting.figure(x_axis_label=self.xlabel,
-                                    y_axis_label=self.ylabel, 
-                                    sizing_mode='stretch_both')
-        # increase the limit for sci. notation on x-axis
-        fig.xaxis.formatter = bokeh.models.BasicTickFormatter(power_limit_high=6)
-        if self._x2_factor is not None:
-            x2_ax = bokeh.models.LinearAxis(axis_label=self._x2_label)
-            js_code = "return Math.round(tick * %f * 100) / 100" % self._x2_factor
-            x2_ax.formatter = bokeh.models.FuncTickFormatter(code=js_code)
-            fig.add_layout(x2_ax, 'above')
-        fig.line(self.x, self.y)
+    def plot(self, fig=None, legend=None, color=None):
+        # TODO: factor might be different plotting twice in same figure - how to check?
+        if fig is None:
+            fig = bokeh.plotting.figure(x_axis_label=self.xlabel,
+                                        y_axis_label=self.ylabel,
+                                        sizing_mode='stretch_both')
+            # increase the limit for sci. notation on x-axis
+            fig.xaxis.formatter = bokeh.models.BasicTickFormatter(power_limit_high=6)
+            if self._x2_factor is not None:
+                x2_ax = bokeh.models.LinearAxis(axis_label=self._x2_label)
+                js_code = "return Math.round(tick * %f * 100) / 100" % self._x2_factor
+                x2_ax.formatter = bokeh.models.FuncTickFormatter(code=js_code)
+                fig.add_layout(x2_ax, 'above')
+        fig.line(self.x, self.y, legend=legend, line_color=color)
         return fig
         
     def __getitem__(self, key):

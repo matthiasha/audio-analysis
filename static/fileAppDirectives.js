@@ -4,26 +4,19 @@ function dropzone() {
 
         var config = {
             url: '/upload',
-            maxFilesize: 100,
             paramName: "uploadfile",
-            maxThumbnailFilesize: 10,
             parallelUploads: 1,
             autoProcessQueue: true
         };
 
-        var eventHandlers = {
-            'addedfile': function(file) {
-                scope.file = file;
-                if (this.files[1]!=null) {
-                    this.removeFile(this.files[0]);
-                }
-                scope.$apply(function() {
-                    scope.fileAdded = true;
-                });
-            },
+        var uploaded = '';
 
+        var eventHandlers = {
             'success': function (file, response) {
-                window.location.replace(response);
+                uploaded += response + ',';
+            },
+            'queuecomplete': function (file, response) {
+                window.location.replace('/wav/' + uploaded);
             }
         };
 
