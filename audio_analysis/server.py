@@ -1,4 +1,5 @@
 import sys
+import os
 import argparse
 import hashlib
 import functools
@@ -7,11 +8,11 @@ import flask_compress
 import bokeh.resources
 import bokeh.embed
 import bokeh.palettes
-import audio
-import tools
+from . import audio
+from . import tools
 
-
-app = flask.Flask(__name__)
+here = os.path.abspath(os.path.dirname(__file__))
+app = flask.Flask(__name__, root_path=here)
 flask_compress.Compress(app)
 filenames = {}
 
@@ -80,6 +81,10 @@ def main(argv):
     app.run(host=args.ip, port=args.port)
 
 
-if __name__ == "__main__":
+def _cli():
     main(sys.argv[1:])
+
+
+if __name__ == "__main__":
+    _cli()
 

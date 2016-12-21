@@ -1,7 +1,10 @@
-import tools
-import audio
+import os
+from audio_analysis import tools
+from audio_analysis import audio
 import numpy as np
 import pytest
+
+here = os.path.abspath(os.path.dirname(__file__))
 
 TOLERANCE_DB = 0.1  # TODO: decrease
 FILES = {'1000Hz_-3dBFS_3s.wav': (1000, -3),
@@ -20,7 +23,7 @@ def lin(dbfs):
 def test_pcmarray(file):
     hz, dbfs = FILES[file]
     ch = 0
-    pcm = audio.PCMArray(file)[ch]
+    pcm = audio.PCMArray(os.path.join(here, file))[ch]
     assert min(abs(pcm)) < lin(TOLERANCE_DB)
     assert abs(max(pcm) - lin(dbfs)) < TOLERANCE_DB
     
@@ -30,7 +33,7 @@ def test_spectrum(file):
     TOLERANCE_DB = 1.5  # TODO: decrease
     hz, dbfs = FILES[file]
     ch = 0
-    pcm = audio.PCMArray(file)[ch]
+    pcm = audio.PCMArray(os.path.join(here, file))[ch]
     s = tools.spectrum(pcm)
     assert abs(s[hz] - dbfs) < TOLERANCE_DB
     
@@ -39,7 +42,7 @@ def test_spectrum(file):
 def test_power(file):
     hz, dbfs = FILES[file]
     ch = 0
-    pcm = audio.PCMArray(file)[ch]
+    pcm = audio.PCMArray(os.path.join(here, file))[ch]
     p = tools.power(pcm, window=1023)
     assert all(abs(p.y - dbfs) < TOLERANCE_DB + .1)
     assert abs(p.y.mean() - dbfs) < TOLERANCE_DB
