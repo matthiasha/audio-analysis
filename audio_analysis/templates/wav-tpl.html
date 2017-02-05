@@ -7,18 +7,29 @@
 </head>
 
 <body>
-    {% for name in names %}
-    {{ name }} <br>
-    {% endfor %}
-    <br><br>
-    <table>
-        {% for ch in channels %}
-        <tr>
-            <td>Channel {{ ch }}</td>
-            <td><a href="/wav/{{ uuid }}/{{ ch }}/spectrum">Spectrum</a></td>
-            <td><a href="/wav/{{ uuid }}/{{ ch }}/power">Power</a></td>
-        </tr>
-        {% endfor %}
-    </table>
+    <form action="/plot">
+        <input type="radio" name="tool" value="power" id="power" />
+        <label for="power">Power</label><br />
+        <input type="radio" name="tool" value="spectrum" id="spectrum" checked="checked" />
+        <label for="spectrum">Spectrum</label>
+
+        <br /><br />
+
+        <table>
+            {% for el in elements %}
+            <tr>
+                <td>{% if el.ch == 0 %}{{ el.name }}{% endif %}</td>
+                <td>
+                    <input type="checkbox" name="e" id="{{ el.uid }}-{{ el.ch }}" checked="checked" value="{{ el.uid }}-{{ el.ch }}">
+                    <label for="{{ el.uid }}-{{ el.ch }}">ch{{ el.ch }}</label>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <br /><br />
+
+        <button>Plot</button>
+    </form>
 </body>
 </html>

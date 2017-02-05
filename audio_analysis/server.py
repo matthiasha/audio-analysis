@@ -48,24 +48,29 @@ def upload_file():
 @app.route('/wav/<uids_str>')
 def file_info(uids_str):
     uids = uids_str.strip(',').split(',')
-    num_channels = [audio.PCMArray(uid + '.wav').shape[0] for uid in uids]
-    if len(set(num_channels)) != 1:
-        return 'Comparing files only with same amount of channels. Given numbers of channels: %s' % num_channels
+
+    def num_ch(uid):
+        return audio.PCMArray(uid + '.wav').shape[0]
+
     return flask.render_template('wav-tpl.html',
-                                 names=[filenames.get(uid, uid) for uid in uids],
-                                 uuid=uids_str,
-                                 channels=range(num_channels[0]))
+                                 elements=[{'uid': uid, 'name': filenames.get(uid, uid), 'ch': ch}
+                                           for uid in uids for ch in range(num_ch(uid))]
+                                 )
 
 
-@app.route('/wav/<uids_str>/<int:channel>/<tool>')
-def tool(uids_str, channel, tool):
+@app.route('/plot')
+def plot():
+    tool = flask.request.args['tool']
     assert tool in ('spectrum', 'power')
     fig = None
-    uids = uids_str.strip(',').split(',')
-    pcms = [audio.PCMArray(uid + '.wav')[channel] for uid in uids]
-    palette = bokeh.palettes.brewer['Set1'][max(len(uids), 3)][:len(uids)]
-    for uid, pcm, color in zip(uids, pcms, palette):
-        legend = '%s ch%i' % (filenames.get(uid, uid), channel)
+    elements = [el.split('-') for el in flask.request.args.getlist('e')]
+    if not len(elements):
+        return 'Please make a selection. <a href="javascript:history.back()">Go back</a>'
+    palette = bokeh.palettes.brewer['Set1'][max(len(elements), 3)][:len(elements)]
+    for (uid, ch), color in zip(elements, palette):
+        ch = int(ch)
+        pcm = audio.PCMArray(uid + '.wav')[ch]
+        legend = '%s ch%i' % (filenames.get(uid, uid), ch)
         fig = getattr(tools, tool)(pcm).plot(fig=fig, legend=legend, color=color)
     return bokeh.embed.file_html(fig, bokeh.resources.CDN)
 
