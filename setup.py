@@ -10,7 +10,7 @@ with open(os.path.join(here, 'README.md')) as f:
 setuptools.setup(
     name='audio-analysis',
     use_scm_version=True, #version='0.1',
-    install_requires=['numpy', 'scipy', 'bokeh', 'flask', 'flask-compress'],
+    install_requires=['numpy', 'scipy', 'bokeh', 'flask', 'flask-compress', 'pandas'],
     setup_requires=['setuptools_scm',],
     description='Tools for analyzing and audio files and plotting the results.',
     long_description=long_description,
