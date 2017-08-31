@@ -2,17 +2,20 @@ import scipy.signal
 import numpy as np
 import bokeh.plotting
 import bokeh.models
+import pandas
 
 
-class Data2D(object):
-    def __init__(self, x, xlabel, y, ylabel):
-        self.x = x
-        self.y = y
-        self.xlabel = xlabel
-        self.ylabel = ylabel
-        self._x2_factor = None
-        self._x2_label = None
-        
+def new_data(x, xlabel, y, ylabel):
+    return Data2D(y, index=pandas.Index(x, name=xlabel), name=ylabel)
+
+
+class Data2D(pandas.Series):
+    _metadata = '_x2_factor _x2_label'.split()
+    
+    @property
+    def _constructor(self):
+        return Data2D
+    
     def plot(self, fig=None, legend=None, color=None):
         # TODO: factor might be different plotting twice in same figure - how to check?
         if fig is None:
@@ -28,9 +31,6 @@ class Data2D(object):
                 fig.add_layout(x2_ax, 'above')
         fig.line(self.x, self.y, legend=legend, line_color=color)
         return fig
-        
-    def __getitem__(self, key):
-        return np.interp(key, self.x, self.y)
         
     def add_x_axis(self, factor, label):
         assert self._x2_factor is None, 'only 2 x-axis possible' 
@@ -51,8 +51,8 @@ def spectrum(pcm, nfft=None):
     f, l_sq = scipy.signal.csd(pcm, pcm, pcm.sample_rate, 
                             nperseg=nfft, scaling='spectrum')
     l = _dbfs(l_sq) 
-    return Data2D(f, 'frequency [Hz]', 
-                  l, 'level [dBFS sine]')
+    return new_data(f, 'frequency [Hz]', 
+                    l, 'level [dBFS sine]')
         
                   
 def power(pcm, window=1023):
@@ -64,8 +64,8 @@ def power(pcm, window=1023):
     i = np.arange(len(pcm)).reshape(-1, window).mean(1)
     # calculate power per window
     p = _dbfs(np.mean(reshaped ** 2, 1)) 
-    d2d = Data2D(i, 'samples', 
-                 p, 'level [dBFS sine]')
+    d2d = new_data(i, 'samples', 
+                   p, 'level [dBFS sine]')
     d2d.add_x_axis(1 / pcm.sample_rate, 'time [s]')
     return d2d
     
