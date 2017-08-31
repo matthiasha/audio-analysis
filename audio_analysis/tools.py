@@ -19,8 +19,8 @@ class Data2D(pandas.Series):
     def plot(self, fig=None, legend=None, color=None):
         # TODO: factor might be different plotting twice in same figure - how to check?
         if fig is None:
-            fig = bokeh.plotting.figure(x_axis_label=self.xlabel,
-                                        y_axis_label=self.ylabel,
+            fig = bokeh.plotting.figure(x_axis_label=self.index.name,
+                                        y_axis_label=self.name,
                                         sizing_mode='stretch_both')
             # increase the limit for sci. notation on x-axis
             fig.xaxis.formatter = bokeh.models.BasicTickFormatter(power_limit_high=6)
@@ -29,7 +29,7 @@ class Data2D(pandas.Series):
                 js_code = "return Math.round(tick * %f * 100) / 100" % self._x2_factor
                 x2_ax.formatter = bokeh.models.FuncTickFormatter(code=js_code)
                 fig.add_layout(x2_ax, 'above')
-        fig.line(self.x, self.y, legend=legend, line_color=color)
+        fig.line(self.index, self, legend=legend, line_color=color)
         return fig
         
     def add_x_axis(self, factor, label):
