@@ -35,7 +35,7 @@ def test_spectrum(file):
     ch = 0
     pcm = audio.PCMArray(os.path.join(here, file))[ch]
     s = tools.spectrum(pcm)
-    assert abs(s[hz] - dbfs) < TOLERANCE_DB
+    assert abs(s.interp(hz) - dbfs) < TOLERANCE_DB
     
     
 @pytest.mark.parametrize('file', FILES.keys())
@@ -44,6 +44,6 @@ def test_power(file):
     ch = 0
     pcm = audio.PCMArray(os.path.join(here, file))[ch]
     p = tools.power(pcm, window=1023)
-    assert all(abs(p.y - dbfs) < TOLERANCE_DB + .1)
-    assert abs(p.y.mean() - dbfs) < TOLERANCE_DB
+    assert all(abs(p - dbfs) < TOLERANCE_DB + .1)
+    assert abs(p.mean() - dbfs) < TOLERANCE_DB
     

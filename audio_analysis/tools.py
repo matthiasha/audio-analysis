@@ -3,6 +3,7 @@ import numpy as np
 import bokeh.plotting
 import bokeh.models
 import pandas
+import scipy.interpolate
 
 
 def new_data(x, xlabel, y, ylabel):
@@ -24,7 +25,7 @@ class Data2D(pandas.Series):
                                         sizing_mode='stretch_both')
             # increase the limit for sci. notation on x-axis
             fig.xaxis.formatter = bokeh.models.BasicTickFormatter(power_limit_high=6)
-            if self._x2_factor is not None:
+            if hasattr(self, '_x2_factor'):
                 x2_ax = bokeh.models.LinearAxis(axis_label=self._x2_label)
                 js_code = "return Math.round(tick * %f * 100) / 100" % self._x2_factor
                 x2_ax.formatter = bokeh.models.FuncTickFormatter(code=js_code)
@@ -33,9 +34,12 @@ class Data2D(pandas.Series):
         return fig
         
     def add_x_axis(self, factor, label):
-        assert self._x2_factor is None, 'only 2 x-axis possible' 
+        assert not hasattr(self, '_x2_factor'), 'only 2 x-axis possible'
         self._x2_factor = factor
         self._x2_label = label
+
+    def interp(self, x, kind='linear'):
+        return scipy.interpolate.interp1d(self.index, self, kind)(x)
 
 
 def _dbfs(sq):
